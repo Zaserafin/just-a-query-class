@@ -33,7 +33,7 @@ class Database
      *
      * @return PDO The PDO connection
      */
-    protected function connect()
+    public function connect()
     {
         try {
             $dsn = $this->prepare_dsn();
