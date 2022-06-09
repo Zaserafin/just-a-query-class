@@ -6,8 +6,6 @@ Simply a query class for mysql databases developed in php.
 
 just-a-query-class is a php project created with the intention of facilitating the execution of database queries using a specific query engine. The purpose of this "class" is that you can send queries and parameters to the query class and get, process and/or format the results from the same query class, allowing dynamic data handling and not requiring many instances.
 
-## Getting Started
-
 ### Dependencies
 
 - PHP >= 7.x
@@ -20,7 +18,7 @@ just-a-query-class is a php project created with the intention of facilitating t
     require_once("path/to/query/file");
 ```
 
-### Executing program
+### How To Use
 
 - To use the "Query" class you can do it as shown below...
 
@@ -54,16 +52,13 @@ $query = new Query($query_str);
 
 - The "execute" function receives two parameters that default to false. "fetch_result" and "fetch_object", this allows to determine if the returned result will be an array and if this array will contain instantiated objects. The objects will have properties whose name corresponds to the name of the table columns
 
-## Authors
+## Authors - Contributors
 
-Contributors names and contact info
-
-ex. Zaserafin  
-ex. [zaserafin.com](https://zaserafin.com/)
+- Zaserafin [zaserafin.com](https://zaserafin.com/)
 
 ## Version History
 
-- 0.1
+- 1.0.0
   - Initial Release
 
 ## License
