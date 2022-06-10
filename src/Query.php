@@ -29,14 +29,16 @@ class Query extends Database
     /**
      * Execute the query
      *
-     * @return mixed The result of the query
+     * @return Query|Boolean Returns the query object or false if the query failed
      */
     public function execute()
     {
         $stmt = $this->connection->prepare($this->query);
         $this->result = $stmt->execute($this->params);
 
-        return $this;
+        if ($this->result) {return $this;}
+
+        return false;
     }
 
     /**
@@ -44,7 +46,7 @@ class Query extends Database
      *
      * @return PDO|Boolean The result of the query
      */
-    public function get()
+    public function get_result()
     {
         return $this->result;
     }
@@ -54,9 +56,9 @@ class Query extends Database
      *
      * @return String json string of the result of the query
      */
-    public function get_json()
+    public function fetch_json()
     {
-        return json_encode($this->get_array());
+        return json_encode($this->fetch_array());
     }
 
     /**
@@ -64,7 +66,7 @@ class Query extends Database
      *
      * @return Array Associative array of the result of the query
      */
-    public function get_array()
+    public function fetch_array()
     {
         return $this->result->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -74,9 +76,29 @@ class Query extends Database
      *
      * @return Array Array of objects
      */
-    public function get_object()
+    public function fetch_object_array()
     {
         return $this->result->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    /**
+     * Set the query to be executed
+     *
+     * @param  String $query The query string
+     */
+    public function set_query($query)
+    {
+        $this->query = $query;
+    }
+
+    /**
+     * Set the parameters for the query
+     *
+     * @param  Array $params The parameters for the query
+     */
+    public function set_params($params)
+    {
+        $this->params = $params;
     }
 
 }
