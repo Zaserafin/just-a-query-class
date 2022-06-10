@@ -15,7 +15,6 @@ class Query extends Database
 {
     private $query = ""; // The query string
     private $params = null; // The parameters for the query
-    private $connection = null; // The connection to the database
     private $result = null; // The result of the query
 
     public function __construct($query, $params = null)
@@ -32,23 +31,52 @@ class Query extends Database
      *
      * @return mixed The result of the query
      */
-    public function execute($fetch_result = false, $fetch_object = false)
+    public function execute()
     {
         $stmt = $this->connection->prepare($this->query);
-        $stmt->execute($this->params);
+        $this->result = $stmt->execute($this->params);
 
-        // If the query is a SELECT query, fetch the result
-        if ($fetch_result) {
-            //If fecth_object is true, fetch the result is an object array
-            if ($fetch_object) {
-                $this->result = $stmt->fetchAll(PDO::FETCH_OBJ);
-            } else {
-                $this->result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            }
-        }
-        $this->result = $stmt;
+        return $this;
+    }
 
+    /**
+     * Get the result of the query as pdo object
+     *
+     * @return PDO|Boolean The result of the query
+     */
+    public function get()
+    {
         return $this->result;
+    }
+
+    /**
+     * Get the result of the query in json format
+     *
+     * @return String json string of the result of the query
+     */
+    public function get_json()
+    {
+        return json_encode($this->get_array());
+    }
+
+    /**
+     * Get the result of the query as an array
+     *
+     * @return Array Associative array of the result of the query
+     */
+    public function get_array()
+    {
+        return $this->result->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get the result of the query as object array
+     *
+     * @return Array Array of objects
+     */
+    public function get_object()
+    {
+        return $this->result->fetchAll(PDO::FETCH_OBJ);
     }
 
 }

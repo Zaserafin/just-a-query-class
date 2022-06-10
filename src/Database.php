@@ -16,6 +16,25 @@ class Database
     private $db_password = "password"; // Database password
     private $db_name = "database_name"; // Database name
     private $db_host = "127.0.0.1"; // Database host
+    protected $connection = null; // The connection to the database
+
+    public function __construct()
+    {
+        $this->search_for_env_variables(); // Search for enviroment variables
+        $this->connection = $this->connect(); // Connect to the database
+    }
+
+    /**
+     * Search for enviroment variables
+     */
+    private function search_for_env_variables()
+    {
+        $this->db_user = isset($_ENV["DB_USER"]) ? $_ENV["DB_USER"] : $this->db_user;
+        $this->db_charset = isset($_ENV["DB_CHARSET"]) ? $_ENV["DB_CHARSET"] : $this->db_charset;
+        $this->db_password = isset($_ENV["DB_PASSWORD"]) ? $_ENV["DB_PASSWORD"] : $this->db_password;
+        $this->db_name = isset($_ENV["DB_NAME"]) ? $_ENV["DB_NAME"] : $this->db_name;
+        $this->db_host = isset($_ENV["DB_HOST"]) ? $_ENV["DB_HOST"] : $this->db_host;
+    }
 
     /**
      * Generate the dsn string
@@ -33,7 +52,7 @@ class Database
      *
      * @return PDO The PDO connection
      */
-    public function connect()
+    protected function connect()
     {
         try {
             $dsn = $this->prepare_dsn();
@@ -43,20 +62,6 @@ class Database
         } catch (PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
         }
-    }
-
-    /**
-     * Sets the configuration data for the database connection.
-     *
-     * @param Array The configuration Array
-     */
-    public function config($data)
-    {
-        $this->db_user = $data["user"];
-        $this->db_charset = $data["charset"];
-        $this->db_password = $data["password"];
-        $this->db_name = $data["database"];
-        $this->db_host = $data["host"];
     }
 
     /**
